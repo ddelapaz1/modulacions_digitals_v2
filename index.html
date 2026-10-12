@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laboratori de modulacions digitals</title>
+  <meta name="description" content="Laboratori interactiu per veure com els bits es converteixen en símbols i modulen una portadora amb ASK, FSK, PSK i QAM.">
+  <link rel="stylesheet" href="css/styles.css?v=v2-2">
+</head>
+<body>
+  <a class="skip" href="#main">Salta al contingut principal</a>
+  <header class="top">
+    <div class="top-inner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 22h5V10h6v12h4V10" stroke="#a5f3d0" stroke-width="2.2"/>
+            <path d="M18 16c1.5-6 3-6 4.5 0s3 6 4.5 0" stroke="#fff" stroke-width="2.2"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Laboratori de modulacions digitals</h1>
+          <p class="subtitle">Dels bits als símbols i de la portadora al senyal transmès: ASK, FSK, PSK i QAM.</p>
+        </div>
+      </div>
+      <nav class="tabs" role="tablist" aria-label="Tipus de modulació">
+        <button role="tab" id="tab-ASK" aria-selected="true" aria-controls="panel-lab"><span class="tab-name">ASK</span><span class="tab-sub">amplitud</span></button>
+        <button role="tab" id="tab-FSK" aria-selected="false" aria-controls="panel-lab" tabindex="-1"><span class="tab-name">FSK</span><span class="tab-sub">freqüència</span></button>
+        <button role="tab" id="tab-PSK" aria-selected="false" aria-controls="panel-lab" tabindex="-1"><span class="tab-name">PSK</span><span class="tab-sub">fase</span></button>
+        <button role="tab" id="tab-QAM" aria-selected="false" aria-controls="panel-lab" tabindex="-1"><span class="tab-name">QAM</span><span class="tab-sub">components I i Q</span></button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- ============ CONTROLS ============ -->
+    <aside class="controls" aria-label="Dades i paràmetres">
+      <section class="card">
+        <h2><span class="num" aria-hidden="true">1</span><label for="bits-input">Bits a transmetre</label></h2>
+        <textarea id="bits-input" rows="3" spellcheck="false" autocomplete="off"
+          aria-describedby="bits-help bits-error"></textarea>
+        <div class="row-between small">
+          <span id="bits-help">Entre 1 i 96 bits. Pots separar-los amb espais o salts de línia.</span>
+          <span id="bits-count" class="count">24 / 96</span>
+        </div>
+        <div id="bits-error" class="error" role="alert" hidden></div>
+        <div class="btn-row">
+          <button type="button" id="btn-random">Bits aleatoris</button>
+          <button type="button" id="btn-alt">Patró altern</button>
+          <button type="button" id="btn-reset" class="ghost">Restableix</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="num" aria-hidden="true">2</span>Modulació</h2>
+        <p class="hint">El tipus de modulació es tria a les pestanyes de la part superior.</p>
+        <div class="field">
+          <label for="sel-M">Nombre de símbols diferents (M)</label>
+          <select id="sel-M"></select>
+        </div>
+        <p class="hint" id="mk-hint"></p>
+      </section>
+
+      <section class="card">
+        <h2><span class="num" aria-hidden="true">3</span>Paràmetres del senyal</h2>
+        <div class="field">
+          <label for="rng-Ts">Durada del símbol, T<sub>s</sub>: <output id="out-Ts" for="rng-Ts"></output></label>
+          <input type="range" id="rng-Ts" min="0.5" max="4" step="0.1">
+        </div>
+        <div class="field">
+          <label for="rng-fc">Freqüència de la portadora, f<sub>c</sub>: <output id="out-fc" for="rng-fc"></output></label>
+          <input type="range" id="rng-fc" min="1" max="12" step="0.5">
+        </div>
+        <div class="field" id="field-df" hidden>
+          <label for="rng-df">Separació entre tons FSK, Δf: <output id="out-df" for="rng-df"></output></label>
+          <input type="range" id="rng-df" min="0.25" max="4" step="0.25">
+          <p class="hint" id="df-hint"></p>
+        </div>
+        <p class="hint" id="cycles-hint"></p>
+        <details class="mini">
+          <summary>Per què freqüències tan baixes?</summary>
+          <p>S’han triat freqüències de simulació baixes (kHz) i durades de mil·lisegons perquè es puguin veure les oscil·lacions de cada símbol. Una transmissió real utilitzaria una portadora adequada a la seva banda de ràdio (MHz o GHz), amb molts més cicles per símbol.</p>
+        </details>
+      </section>
+
+      <section class="card">
+        <h2><span class="num ico" aria-hidden="true">◐</span>Visualització</h2>
+        <label class="check"><input type="checkbox" id="chk-overlay"> Superposa la portadora de referència al senyal modulat</label>
+        <div class="field">
+          <label for="sel-speed">Velocitat de reproducció</label>
+          <select id="sel-speed">
+            <option value="0.5">Lenta (1 símbol cada 2 s)</option>
+            <option value="1" selected>Normal (1 símbol per segon)</option>
+            <option value="2.5">Ràpida (2,5 símbols per segon)</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="num ico" aria-hidden="true">↓</span>Descàrregues</h2>
+        <div class="btn-col">
+          <button type="button" id="btn-png">Descarrega imatge de les gràfiques (PNG)</button>
+          <button type="button" id="btn-txt">Descarrega resum de dades (TXT)</button>
+          <button type="button" id="btn-csv">Descarrega taula de símbols (CSV)</button>
+        </div>
+      </section>
+    </aside>
+
+    <!-- ============ CONTINGUT ============ -->
+    <main id="main" tabindex="-1">
+      <div id="stale-banner" class="banner" hidden>Les dades del camp no són vàlides: es mostren les darreres dades correctes.</div>
+
+      <!-- ---------- LABORATORI ---------- -->
+      <section id="panel-lab" role="tabpanel" aria-labelledby="tab-ASK">
+        <section class="card intro" id="intro-card" aria-live="polite"></section>
+
+        <section class="card">
+          <h2 class="sr-only">Resum de la transmissió</h2>
+          <dl class="stats" id="stats"></dl>
+          <div class="groups" aria-label="Grups de bits (símbols). Fes-hi clic per seleccionar-ne un.">
+            <span class="groups-label">Símbols transmesos:</span>
+            <div id="chips" class="chips"></div>
+          </div>
+        </section>
+
+        <section class="card charts">
+          <div class="toolbar" role="toolbar" aria-label="Reproducció i navegació temporal">
+            <div class="btn-row">
+              <button type="button" id="btn-prev" aria-label="Símbol anterior">◀ Símbol anterior</button>
+              <button type="button" id="btn-play" class="primary">▶ Reprodueix</button>
+              <button type="button" id="btn-pause">❚❚ Pausa</button>
+              <button type="button" id="btn-next" aria-label="Símbol següent">Símbol següent ▶</button>
+            </div>
+            <div class="zoom" data-nav="lab">
+              <span class="small">Zoom temporal:</span>
+              <button type="button" data-zoom="out" aria-label="Allunya (més temps visible)">−</button>
+              <button type="button" data-zoom="in" aria-label="Apropa (menys temps visible)">+</button>
+              <button type="button" data-zoom="all">Tot</button>
+            </div>
+          </div>
+          <div class="nav-row" data-nav="lab">
+            <label class="small" for="lab-scroll">Desplaçament:</label>
+            <input type="range" id="lab-scroll" data-scroll min="0" max="1000" value="0" step="1">
+            <span class="small" data-window></span>
+          </div>
+
+          <figure class="chart">
+            <figcaption><b>A.</b> Bits i agrupació en símbols <span class="legend"><i class="sw sw-bit"></i>bit de dades <i class="sw sw-pad"></i>bit de farciment (afegit)</span></figcaption>
+            <canvas id="cv-bits" data-h="120" tabindex="0" role="img" aria-label="Senyal binari amb els grups de bits. Fletxes esquerra i dreta per canviar de símbol."></canvas>
+          </figure>
+          <figure class="chart">
+            <figcaption><b>B.</b> Portadora de referència sense modular <span class="legend" id="carrier-legend"></span></figcaption>
+            <canvas id="cv-carrier" data-h="96" tabindex="0" role="img" aria-label="Portadora de referència"></canvas>
+          </figure>
+          <figure class="chart">
+            <figcaption><b>C.</b> Senyal modulat transmès s(t) <span class="legend"><i class="sw sw-sig"></i>s(t) <span id="overlay-legend" hidden><i class="sw sw-car"></i>portadora (referència)</span> <i class="sw sw-sel"></i>símbol seleccionat</span></figcaption>
+            <canvas id="cv-signal" data-h="210" tabindex="0" role="img" aria-label="Senyal modulat en funció del temps. Fletxes esquerra i dreta per canviar de símbol."></canvas>
+          </figure>
+          <figure class="chart" id="fig-freq" hidden>
+            <figcaption><b>C2.</b> Freqüència instantània seleccionada al llarg del temps</figcaption>
+            <canvas id="cv-freq" data-h="120" tabindex="0" role="img" aria-label="Freqüència de cada símbol FSK en funció del temps"></canvas>
+          </figure>
+          <p class="note">Model idealitzat: els símbols canvien de manera abrupta als límits (línies discontínues). Els equips reals incorporen filtratge i conformació de polsos per suavitzar aquestes transicions.</p>
+        </section>
+
+        <div class="split">
+          <section class="card">
+            <h2 id="const-title">D. Constel·lació</h2>
+            <fieldset class="mapping" id="mapping-field">
+              <legend>Disposició dels bits</legend>
+              <label><input type="radio" name="mapping" value="natural"> Binària natural</label>
+              <label><input type="radio" name="mapping" value="gray"> Gray</label>
+              <label class="check" id="chk-links-wrap"><input type="checkbox" id="chk-links"> Mostra quants bits canvien entre veïns</label>
+              <p class="hint" id="mapping-hint" aria-live="polite"></p>
+            </fieldset>
+            <div class="const-wrap">
+              <canvas id="cv-const" tabindex="0" role="img" aria-label="Constel·lació. Fletxes per recórrer els símbols possibles."></canvas>
+            </div>
+            <p class="hint" id="const-note"></p>
+            <p class="small legend"><i class="dot dot-used"></i>símbol present a les dades <i class="dot dot-unused"></i>símbol possible no utilitzat <i class="dot dot-sel"></i>seleccionat</p>
+          </section>
+          <section class="card detail" id="detail" aria-live="polite"></section>
+        </div>
+
+        <section class="card">
+          <h2>E. Taula de correspondències (M = <span id="map-M"></span> símbols possibles)</h2>
+          <p class="hint"><span id="map-kind">Correspondència fixa</span>, amb el bit més significatiu primer. Fes clic en una fila per localitzar el símbol a la transmissió (un altre clic passa a la següent ocurrència).</p>
+          <div class="table-wrap"><table id="map-table" class="data"></table></div>
+        </section>
+
+        <section class="card">
+          <h2>Seqüència de símbols transmesos</h2>
+          <div class="table-wrap tall"><table id="tx-table" class="data"></table></div>
+        </section>
+      </section>
+
+      <!-- ---------- EXPLICACIONS ---------- -->
+      <section class="card explain">
+        <h2>Per entendre-ho</h2>
+        <details open>
+          <summary>M, k i nombre de símbols de la transmissió</summary>
+          <p><b>M</b> és el nombre de símbols <i>diferents</i> que té disponibles la modulació (el seu «alfabet»). Cada símbol representa <b>k = log<sub>2</sub>(M)</b> bits: amb M = 2, k = 1; amb M = 4, k = 2; amb M = 8, k = 3; amb M = 16, k = 4.</p>
+          <p>No ho confonguis amb el <b>nombre de símbols que conté la teva transmissió</b>, N = (bits + bits de farciment) / k. <span id="mk-live"></span></p>
+        </details>
+        <details>
+          <summary>Per què és una modulació «digital» si el senyal és una ona contínua?</summary>
+          <p>La modulació és digital perquè només utilitza un <b>conjunt finit de símbols</b> (M estats possibles d’amplitud, freqüència, fase o I/Q). En canvi, el senyal que s’envia per l’antena és una <b>ona contínua en el temps</b>: durant cada interval T<sub>s</sub> la portadora oscil·la amb els paràmetres del símbol corresponent.</p>
+        </details>
+        <details>
+          <summary>Model idealitzat d’aquest laboratori</summary>
+          <ul>
+            <li>Tots els símbols duren el mateix (T<sub>s</sub>) i els seus paràmetres són constants dins de l’interval.</li>
+            <li>El senyal es calcula amb el temps global t: la portadora no es reinicia a cada símbol.</li>
+            <li>Els canvis de símbol són abruptes. Els equips reals filtren el senyal i conformen els polsos; aquí no es suavitza res perquè es vegi el salt.</li>
+            <li>Es calculen almenys 40 mostres per cicle de la freqüència més alta.</li>
+          </ul>
+        </details>
+        <details>
+          <summary>Disposició natural o Gray</summary>
+          <p>La forma de la constel·lació (on són els punts) i la <b>disposició dels bits</b> (quin grup de bits correspon a cada punt) són dues decisions diferents. Emissor i receptor només han d’utilitzar la mateixa taula.</p>
+          <ul>
+            <li><b>Binària natural:</b> els punts s’ordenen segons el valor binari (00, 01, 10, 11…). Alguns veïns difereixen en dos o més bits.</li>
+            <li><b>Gray:</b> l’ordre segueix el codi Gray (00, 01, 11, 10…), en què dos valors consecutius només difereixen en un bit. Així, tots els punts veïns difereixen en un sol bit.</li>
+          </ul>
+          <p><b>Avantatge de Gray:</b> el soroll desplaça el punt rebut i, quan el receptor s’equivoca, gairebé sempre tria un punt <i>veí</i>. Amb Gray, aquesta equivocació només costa 1 bit erroni. No canvia ni la potència, ni l’ample de banda, ni la separació entre punts: només la taula de correspondència. Per això la majoria de sistemes reals utilitzen Gray.</p>
+          <p>Amb 2-ASK, BPSK i 4-QAM, les dues disposicions coincideixen. FSK no té constel·lació I/Q i manté l’ordre natural dels tons.</p>
+        </details>
+        <details>
+          <summary>Glossari</summary>
+          <dl class="glossary">
+            <dt>Bit</dt><dd>Unitat mínima d’informació: 0 o 1.</dd>
+            <dt>Símbol</dt><dd>Estat del senyal durant un interval T<sub>s</sub>; representa un grup de k bits.</dd>
+            <dt>Portadora</dt><dd>Ona sinusoidal de freqüència f<sub>c</sub> que es modifica per transportar la informació.</dd>
+            <dt>Amplitud</dt><dd>Valor màxim que assoleix l’ona; indica la seva «alçada».</dd>
+            <dt>Freqüència</dt><dd>Nombre de cicles per segon (Hz). 1 kHz = 1000 cicles per segon.</dd>
+            <dt>Fase</dt><dd>Desplaçament de l’ona respecte a una referència, en graus (0°–360°).</dd>
+            <dt>Constel·lació</dt><dd>Diagrama que dibuixa tots els símbols possibles com a punts del pla I/Q.</dd>
+            <dt>Components I/Q</dt><dd>I (en fase) multiplica cos(2πf<sub>c</sub>t) i Q (en quadratura) multiplica −sin(2πf<sub>c</sub>t). Junts fixen l’amplitud i la fase.</dd>
+            <dt>Baud</dt><dd>Unitat de la taxa de símbols: símbols per segon (R<sub>s</sub> = 1/T<sub>s</sub>).</dd>
+            <dt>bit/s</dt><dd>Unitat de la taxa de bits: R<sub>b</sub> = k · R<sub>s</sub>.</dd>
+          </dl>
+        </details>
+        <div class="explore">
+          <h3>Idees per explorar</h3>
+          <ul>
+            <li>Canvia un bit i observa quin símbol i quin fragment del senyal canvien.</li>
+            <li>Compara BPSK, QPSK i 8-PSK: quants bits representa cada símbol?</li>
+            <li>Observa què passa quan dos símbols consecutius són iguals.</li>
+            <li>Localitza en 16-QAM dos símbols amb la mateixa amplitud i fases diferents.</li>
+            <li>Canvia de disposició natural a Gray en 16-QAM: quins punts canvien d’etiqueta i quines línies vermelles desapareixen?</li>
+          </ul>
+        </div>
+      </section>
+      <footer class="foot small">Laboratori de modulacions digitals · Funciona íntegrament al navegador, sense comptes ni serveis externs.</footer>
+    </main>
+  </div>
+
+  <script src="js/model.js?v=v2-2"></script>
+  <script src="js/app.js?v=v2-2"></script>
+</body>
+</html>
