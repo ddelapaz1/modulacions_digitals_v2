@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Laboratori de modulacions digitals</title>
   <meta name="description" content="Laboratori interactiu per veure com els bits es converteixen en símbols i modulen una portadora amb ASK, FSK, PSK i QAM.">
-  <link rel="stylesheet" href="css/styles.css?v=v2-2">
+  <link rel="stylesheet" href="css/styles.css?v=v2-3">
 </head>
 <body>
   <a class="skip" href="#main">Salta al contingut principal</a>
@@ -24,10 +24,10 @@
         </div>
       </div>
       <nav class="tabs" role="tablist" aria-label="Tipus de modulació">
-        <button role="tab" id="tab-ASK" aria-selected="true" aria-controls="panel-lab"><span class="tab-name">ASK</span><span class="tab-sub">amplitud</span></button>
-        <button role="tab" id="tab-FSK" aria-selected="false" aria-controls="panel-lab" tabindex="-1"><span class="tab-name">FSK</span><span class="tab-sub">freqüència</span></button>
-        <button role="tab" id="tab-PSK" aria-selected="false" aria-controls="panel-lab" tabindex="-1"><span class="tab-name">PSK</span><span class="tab-sub">fase</span></button>
-        <button role="tab" id="tab-QAM" aria-selected="false" aria-controls="panel-lab" tabindex="-1"><span class="tab-name">QAM</span><span class="tab-sub">components I i Q</span></button>
+        <button role="tab" id="tab-ASK" aria-selected="true" aria-controls="panel-lab"><svg class="tab-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 10h3"/><path d="M4 10c1-7 2-7 3 0s2 7 3 0"/><path d="M10 10c.6-3 1.2-3 1.8 0s1.2 3 1.8 0"/><path d="M13.6 10H19"/></svg><span class="tab-txt"><span class="tab-name">ASK</span><span class="tab-sub">amplitud</span></span></button>
+        <button role="tab" id="tab-FSK" aria-selected="false" aria-controls="panel-lab" tabindex="-1"><svg class="tab-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 10c1.2-6 2.4-6 3.6 0s2.4 6 3.6 0"/><path d="M8.2 10c.6-6 1.2-6 1.8 0s1.2 6 1.8 0 1.2-6 1.8 0 1.2 6 1.8 0 1.2-6 1.8 0 1.2 6 1.8 0"/></svg><span class="tab-txt"><span class="tab-name">FSK</span><span class="tab-sub">freqüència</span></span></button>
+        <button role="tab" id="tab-PSK" aria-selected="false" aria-controls="panel-lab" tabindex="-1"><svg class="tab-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 10c1-6 2-6 3 0s2 6 3 0 2-6 3 0"/><path d="M10 10c1 6 2 6 3 0s2-6 3 0 2 6 3 0"/><path d="M10 3v14" stroke-dasharray="1.5 2" stroke-width="1.2"/></svg><span class="tab-txt"><span class="tab-name">PSK</span><span class="tab-sub">fase</span></span></button>
+        <button role="tab" id="tab-QAM" aria-selected="false" aria-controls="panel-lab" tabindex="-1"><svg class="tab-ico" viewBox="0 0 20 20" fill="currentColor" stroke="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="5" r="1.4"/><circle cx="10" cy="5" r="1.4"/><circle cx="15" cy="5" r="1.4"/><circle cx="5" cy="10" r="1.4"/><circle cx="10" cy="10" r="1.4"/><circle cx="15" cy="10" r="1.4"/><circle cx="5" cy="15" r="1.4"/><circle cx="10" cy="15" r="1.4"/><circle cx="15" cy="15" r="1.4"/></svg><span class="tab-txt"><span class="tab-name">QAM</span><span class="tab-sub">components I i Q</span></span></button>
       </nav>
     </div>
   </header>
@@ -165,7 +165,7 @@
 
         <div class="split">
           <section class="card">
-            <h2 id="const-title">D. Constel·lació</h2>
+            <h2 class="sec"><span class="tag" aria-hidden="true">D</span><span id="const-title">Constel·lació</span></h2>
             <fieldset class="mapping" id="mapping-field">
               <legend>Disposició dels bits</legend>
               <label><input type="radio" name="mapping" value="natural"> Binària natural</label>
@@ -183,20 +183,20 @@
         </div>
 
         <section class="card">
-          <h2>E. Taula de correspondències (M = <span id="map-M"></span> símbols possibles)</h2>
+          <h2 class="sec"><span class="tag" aria-hidden="true">E</span><span>Taula de correspondències (M = <span id="map-M"></span> símbols possibles)</span></h2>
           <p class="hint"><span id="map-kind">Correspondència fixa</span>, amb el bit més significatiu primer. Fes clic en una fila per localitzar el símbol a la transmissió (un altre clic passa a la següent ocurrència).</p>
           <div class="table-wrap"><table id="map-table" class="data"></table></div>
         </section>
 
         <section class="card">
-          <h2>Seqüència de símbols transmesos</h2>
+          <h2 class="sec"><span class="tag" aria-hidden="true">F</span>Seqüència de símbols transmesos</h2>
           <div class="table-wrap tall"><table id="tx-table" class="data"></table></div>
         </section>
       </section>
 
       <!-- ---------- EXPLICACIONS ---------- -->
       <section class="card explain">
-        <h2>Per entendre-ho</h2>
+        <h2 class="sec"><span class="tag tag-soft" aria-hidden="true">?</span>Per entendre-ho</h2>
         <details open>
           <summary>M, k i nombre de símbols de la transmissió</summary>
           <p><b>M</b> és el nombre de símbols <i>diferents</i> que té disponibles la modulació (el seu «alfabet»). Cada símbol representa <b>k = log<sub>2</sub>(M)</b> bits: amb M = 2, k = 1; amb M = 4, k = 2; amb M = 8, k = 3; amb M = 16, k = 4.</p>
@@ -255,7 +255,7 @@
     </main>
   </div>
 
-  <script src="js/model.js?v=v2-2"></script>
-  <script src="js/app.js?v=v2-2"></script>
+  <script src="js/model.js?v=v2-3"></script>
+  <script src="js/app.js?v=v2-3"></script>
 </body>
 </html>

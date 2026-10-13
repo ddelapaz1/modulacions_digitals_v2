@@ -751,7 +751,7 @@
 
     // Constel·lació
     const isF = R.mod === 'FSK';
-    $('#const-title').textContent = isF ? 'D. Diagrama de tons FSK' : R.mod === 'ASK' ? 'D. Estats d’amplitud sobre l’eix I' : 'D. Constel·lació I/Q';
+    $('#const-title').textContent = isF ? 'Diagrama de tons FSK' : R.mod === 'ASK' ? 'Estats d’amplitud sobre l’eix I' : 'Constel·lació I/Q';
     $('#const-note').innerHTML = isF
       ? 'En aquest laboratori, els símbols FSK s’identifiquen per la freqüència: cada barra és un to possible amb els bits associats.'
       : R.mod === 'ASK' ? 'Cada punt és un nivell d’amplitud (Q = 0). Escala igual als dos eixos.'
