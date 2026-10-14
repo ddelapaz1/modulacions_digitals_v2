@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Laboratori de modulacions digitals</title>
   <meta name="description" content="Laboratori interactiu per veure com els bits es converteixen en símbols i modulen una portadora amb ASK, FSK, PSK i QAM.">
-  <link rel="stylesheet" href="css/styles.css?v=v2-3">
+  <link rel="stylesheet" href="css/styles.css?v=v2-4">
 </head>
 <body>
   <a class="skip" href="#main">Salta al contingut principal</a>
@@ -23,6 +23,10 @@
           <p class="subtitle">Dels bits als símbols i de la portadora al senyal transmès: ASK, FSK, PSK i QAM.</p>
         </div>
       </div>
+      <button type="button" id="btn-fs" class="fs-btn" aria-pressed="false" aria-label="Pantalla completa" title="Pantalla completa (F)" hidden>
+        <svg class="fs-on" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5V3h4.5M12.5 3H17v4.5M17 12.5V17h-4.5M7.5 17H3v-4.5"/></svg>
+        <svg class="fs-off" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 3v4.5H3M17 7.5h-4.5V3M12.5 17v-4.5H17M3 12.5h4.5V17"/></svg>
+      </button>
       <nav class="tabs" role="tablist" aria-label="Tipus de modulació">
         <button role="tab" id="tab-ASK" aria-selected="true" aria-controls="panel-lab"><svg class="tab-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 10h3"/><path d="M4 10c1-7 2-7 3 0s2 7 3 0"/><path d="M10 10c.6-3 1.2-3 1.8 0s1.2 3 1.8 0"/><path d="M13.6 10H19"/></svg><span class="tab-txt"><span class="tab-name">ASK</span><span class="tab-sub">amplitud</span></span></button>
         <button role="tab" id="tab-FSK" aria-selected="false" aria-controls="panel-lab" tabindex="-1"><svg class="tab-ico" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 10c1.2-6 2.4-6 3.6 0s2.4 6 3.6 0"/><path d="M8.2 10c.6-6 1.2-6 1.8 0s1.2 6 1.8 0 1.2-6 1.8 0 1.2 6 1.8 0 1.2-6 1.8 0 1.2 6 1.8 0"/></svg><span class="tab-txt"><span class="tab-name">FSK</span><span class="tab-sub">freqüència</span></span></button>
@@ -255,7 +259,7 @@
     </main>
   </div>
 
-  <script src="js/model.js?v=v2-3"></script>
-  <script src="js/app.js?v=v2-3"></script>
+  <script src="js/model.js?v=v2-4"></script>
+  <script src="js/app.js?v=v2-4"></script>
 </body>
 </html>

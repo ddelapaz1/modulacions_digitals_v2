@@ -1222,6 +1222,30 @@
     $('#btn-txt').addEventListener('click', exportTXT);
     $('#btn-csv').addEventListener('click', exportCSV);
 
+    // pantalla completa (pissarra digital)
+    const fsBtn = $('#btn-fs'), root = document.documentElement;
+    const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+    if (root.requestFullscreen || root.webkitRequestFullscreen) {
+      fsBtn.hidden = false;
+      const toggleFS = () => {
+        if (fsEl()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+        else (root.requestFullscreen || root.webkitRequestFullscreen).call(root);
+      };
+      const syncFS = () => {
+        const on = !!fsEl();
+        fsBtn.setAttribute('aria-pressed', on);
+        fsBtn.title = on ? 'Surt de la pantalla completa (F o Esc)' : 'Pantalla completa (F)';
+        fsBtn.setAttribute('aria-label', on ? 'Surt de la pantalla completa' : 'Pantalla completa');
+      };
+      fsBtn.addEventListener('click', toggleFS);
+      document.addEventListener('fullscreenchange', syncFS);
+      document.addEventListener('webkitfullscreenchange', syncFS);
+      document.addEventListener('keydown', e => {
+        if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && !e.altKey &&
+            !e.target.closest('input, textarea, select, [contenteditable], canvas')) toggleFS();
+      });
+    }
+
     let rz = null;
     const ro = new ResizeObserver(() => {
       cancelAnimationFrame(rz);
